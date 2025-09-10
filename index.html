@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的第一个网站 | 神秘商店</title>
+  <meta name="description" content="这是一个从零开始可直接修改的示例网站。按注释一步步学会做网站。" />
+  <style>
+    /*
+     * 🎯 超简洁样式。你只需改少量地方就能做出体面网页。
+     * 结构：变量 → 基础 → 布局 → 组件 → 响应式
+     */
+
+    /* 颜色变量（可一键换色）----------------------------------------- */
+    :root{
+      --bg: #ffffff;
+      --text: #111827; /* 灰黑 */
+      --muted: #6b7280; /* 次要文字 */
+      --card: #f3f4f6; /* 卡片底色 */
+      --accent: #2563eb; /* 主题色（蓝）*/
+      --accent-2: #1d4ed8;
+      --ring: rgba(37,99,235,.35);
+    }
+    [data-theme="dark"]{
+      --bg: #0b1220;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --card: #111827;
+      --accent: #60a5fa;
+      --accent-2: #3b82f6;
+      --ring: rgba(96,165,250,.35);
+    }
+
+    /* 基础样式 -------------------------------------------------------- */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--text);}    
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%;display:block}
+    .container{max-width:980px;margin:0 auto;padding:0 16px}
+    .section{padding:56px 0}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--card); color:var(--muted); font-size:12px}
+
+    /* 顶部导航 -------------------------------------------------------- */
+    .nav{position:sticky;top:0;backdrop-filter:saturate(180%) blur(10px); background:color-mix(in oklab, var(--bg) 80%, transparent); border-bottom:1px solid color-mix(in oklab, var(--text) 12%, transparent);}
+    .nav .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .brand{font-weight:700}
+    .nav a.btn{margin-left:12px}
+
+    /* 按钮 ------------------------------------------------------------ */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--accent);color:#fff;border:1px solid var(--accent-2);box-shadow:0 0 0 0 var(--ring);transition:box-shadow .2s, transform .03s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:focus{outline:none;box-shadow:0 0 0 6px var(--ring)}
+    .btn.secondary{background:transparent;color:var(--text);border:1px solid color-mix(in oklab, var(--text) 20%, transparent)}
+
+    /* Hero ------------------------------------------------------------ */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;padding:40px 0 24px}
+    .hero h1{font-size:40px;line-height:1.2;margin:12px 0}
+    .hero p{color:var(--muted)}
+    .hero .actions{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+    .hero .cover{border-radius:16px;overflow:hidden;border:1px solid color-mix(in oklab, var(--text) 12%, transparent)}
+
+    /* 卡片与网格 ------------------------------------------------------ */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:var(--card);border-radius:16px;padding:16px;border:1px solid color-mix(in oklab, var(--text) 10%, transparent)}
+    .card h3{margin:8px 0 4px}
+    .card p{color:var(--muted);margin:0}
+
+    /* 表单 ------------------------------------------------------------ */
+    .field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+    .input, textarea{padding:12px 14px;border-radius:12px;border:1px solid color-mix(in oklab, var(--text) 18%, transparent); background:var(--bg); color:var(--text)}
+    textarea{min-height:120px;resize:vertical}
+
+    /* 页脚 ------------------------------------------------------------ */
+    footer{border-top:1px solid color-mix(in oklab, var(--text) 12%, transparent); padding:24px 0; color:var(--muted)}
+
+    /* 响应式 ---------------------------------------------------------- */
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr}
+    }
+    @media (max-width: 720px){
+      .grid{grid-template-columns:1fr}
+      .hero h1{font-size:32px}
+    }
+  </style>
+</head>
+<body>
+  <!--
+    ✅ 使用说明（先读！）
+    1) 这是一个可以“直接发布”的单页网站模版。
+    2) 按下面的 TODO 步骤修改文字与链接，你就拥有一个体面主页。
+    3) 练习顺序：改标题 → 改简介 → 改项目卡片 → 改表单 → 发布到 GitHub Pages。
+  -->
+
+  <nav class="nav">
+    <div class="container row">
+      <div class="row" style="display:flex;align-items:center;gap:12px">
+        <span class="brand">🌱 <span id="site-name">神秘商店</span></span>
+        <span class="badge">新手入门站点</span>
+      </div>
+      <div>
+        <button id="theme-toggle" class="btn secondary" aria-label="切换明暗主题">切换主题</button>
+        <a class="btn" href="#contact">联系我</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container hero section">
+    <div>
+      <span class="badge">TODO #1：SECRET SHOP BY Damon</span>
+      <h1>你好，我是<span class="brand">神秘商店</span>，正在快速学习做网站。</h1>
+      <p>我对网页设计、前端基础和小型项目一窍不通。</p>
+      <div class="actions">
+        <a class="btn" href="#projects">查看我的练习项目</a>
+        <a class="btn secondary" href="#about">关于我</a>
+      </div>
+    </div>
+    <div class="cover">
+      <!-- 占位图：后续可替换为你的图片链接 -->
+      <img alt="示例封面" src="https://picsum.photos/seed/learnweb/960/720"/>
+    </div>
+  </header>
+
+  <main class="container section" id="about">
+    <h2>关于我</h2>
+    <p style="color:var(--muted)">TODO #2：啥也不懂</p>
+  </main>
+
+  <section class="container section" id="projects">
+    <h2>我的练习项目</h2>
+    <div class="grid" style="margin-top:12px">
+      <article class="card">
+        <img alt="项目封面" src="https://picsum.photos/seed/card1/800/600">
+        <h3>项目 A：静态名片页</h3>
+        <p>改文字 + 改颜色 → 发布上线，完成第一个“可分享链接”。</p>
+      </article>
+      <article class="card">
+        <img alt="项目封面" src="https://picsum.photos/seed/card2/800/600">
+        <h3>项目 B：响应式布局</h3>
+        <p>让页面在手机上也好看（这套模板已内置基础响应式）。</p>
+      </article>
+      <article class="card">
+        <img alt="项目封面" src="https://picsum.photos/seed/card3/800/600">
+        <h3>项目 C：联系表单（本地模拟）</h3>
+        <p>用 JS 拦截提交并存储到浏览器，学习最小交互逻辑。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="container section" id="contact">
+    <h2>联系我</h2>
+    <p style="color:var(--muted)">1326086729@qq.com。</p>
+
+    <form id="contact-form" style="margin-top:10px">
+      <div class="field">
+        <label for="name">账号</label>
+        <input class="input" id="name" name="name" placeholder="张三" required />
+      </div>
+      <div class="field">
+        <label for="email">邮箱</label>
+        <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required />
+      </div>
+      <div class="field">
+        <label for="message">留言</label>
+        <textarea id="message" name="message" placeholder="想对我说的话…" required></textarea>
+      </div>
+      <button class="btn" type="submit">发送（本地模拟）</button>
+      <span id="form-tip" class="badge" style="margin-left:8px">提交后将存入浏览器本地存储</span>
+    </form>
+
+    <div id="inbox" style="margin-top:16px; display:none">
+      <h3>📮 本地收件箱（仅你自己可见）</h3>
+      <div id="inbox-list" class="grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <small>© <span id="year"></span> <span class="brand">神秘商店</span>. 构建于纯 HTML + CSS + JS | <a href="#" id="edit-link">如何编辑？</a></small>
+    </div>
+  </footer>
+
+  <script>
+    // ============== 明暗主题开关（可忽略） ====================
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme){ root.setAttribute('data-theme', savedTheme); }
+    themeBtn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+      if(next){ root.setAttribute('data-theme', 'dark'); localStorage.setItem('theme','dark'); }
+      else{ root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
+    });
+
+    // ============== 年份与“如何编辑” ==========================
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('edit-link').addEventListener('click', (e)=>{
+      e.preventDefault();
+      alert(`如何编辑：\n1) 直接在页面顶部点击“打开 Canvas 里的代码”，修改带有 TODO 的中文注释位置；\n2) 改完按右上角保存；\n3) 想发布上线，复制这个 HTML 文件去 GitHub Pages。`);
+    });
+
+    // ============== 表单本地模拟“收件箱” =====================
+    const form = document.getElementById('contact-form');
+    const inbox = document.getElementById('inbox');
+    const list = document.getElementById('inbox-list');
+
+    function loadMessages(){
+      const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
+      if(msgs.length){
+        inbox.style.display = 'block';
+        list.innerHTML = '';
+        msgs.slice().reverse().forEach(m => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<h3>${m.name} &lt;${m.email}&gt;</h3><p>${m.message}</p><p class="badge">${new Date(m.time).toLocaleString()}</p>`;
+          list.appendChild(card);
+        });
+      }
+    }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      if(!name || !email || !message){ return; }
+      const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
+      msgs.push({name,email,message,time:Date.now()});
+      localStorage.setItem('messages', JSON.stringify(msgs));
+      form.reset();
+      loadMessages();
+      alert('✅ 已发送（本地模拟）。要实现真发信，需要后端或第三方服务。');
+    });
+
+    loadMessages();
+
+    // ============== 小改动：同步标题中的名字 ===================
+    const nameSpans = document.querySelectorAll('.brand');
+// 统一使用同一个名字（无需手动在每处改）
+const YOUR_NAME = '神秘商店';
+nameSpans.forEach(el => { el.textContent = YOUR_NAME; });
+// 可按需自定义标题格式
+document.title = '我的第一个网站 | ' + YOUR_NAME;
+  </script>
+</body>
+</html>
