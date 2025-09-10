@@ -152,29 +152,32 @@
     <h2>联系我</h2>
     <p style="color:var(--muted)">1326086729@qq.com。</p>
 
-    <form id="contact-form" action="https://formsubmit.co/1326086729@qq.com" method="POST" style="margin-top:10px">
-      <!-- FormSubmit: 成功后跳转到感谢页（可选） -->
-      <input type="hidden" name="_next" value="https://damontheone.github.io/Damonmystery-shop/thanks.html" />
-      <!-- FormSubmit: 邮件主题 / 模板 / 关闭验证码 / 反垃圾蜜罐 -->
-      <input type="hidden" name="_subject" value="网站联系表单新消息" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="text" name="_honey" style="display:none" />
-      <div class="field">
-        <label for="name">账号</label>
-        <input class="input" id="name" name="name" placeholder="张三" required />
-      </div>
-      <div class="field">
-        <label for="email">邮箱</label>
-        <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required />
-      </div>
-      <div class="field">
-        <label for="message">留言</label>
-        <textarea id="message" name="message" placeholder="想对我说的话…" required></textarea>
-      </div>
-      <button class="btn" type="submit">发送</button>
-      <span id="form-tip" class="badge" style="margin-left:8px">将把信息发送到我的邮箱（FormSubmit）</span>
-    </form>
+   <form id="contact-form" action="https://formsubmit.co/1326086729@qq.com" method="POST" style="margin-top:10px">
+  <!-- 表单字段 -->
+  <div class="field">
+    <label for="name">你的名字</label>
+    <input class="input" id="name" name="name" placeholder="张三" required />
+  </div>
+  <div class="field">
+    <label for="email">邮箱</label>
+    <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required />
+  </div>
+  <div class="field">
+    <label for="message">留言</label>
+    <textarea id="message" name="message" placeholder="想对我说的话…" required></textarea>
+  </div>
+
+  <!-- FormSubmit 配置（隐藏项） -->
+  <input type="hidden" name="_next" value="https://damontheone.github.io/Damonmystery-shop/thanks.html" />
+  <input type="hidden" name="_subject" value="网站联系表单新消息" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+  <input type="hidden" name="_autoresponse" value="已收到你的留言，我会尽快回复。" />
+
+  <button class="btn" type="submit">发送</button>
+  <span id="form-tip" class="badge" style="margin-left:8px">提交后将跳转到成功页面并发送邮件</span>
+</form>
 
     <div id="inbox" style="margin-top:16px; display:none">
       <h3>📮 本地收件箱（仅你自己可见）</h3>
@@ -207,50 +210,53 @@
       alert(`如何编辑：\n1) 直接在页面顶部点击“打开 Canvas 里的代码”，修改带有 TODO 的中文注释位置；\n2) 改完按右上角保存；\n3) 想发布上线，复制这个 HTML 文件去 GitHub Pages。`);
     });
 
-    // ============== 表单：本地模拟 或 真发信（Formspree） =====================
-    const form = document.getElementById('contact-form');
-    const inbox = document.getElementById('inbox');
-    const list = document.getElementById('inbox-list');
-    const tip = document.getElementById('form-tip');
+// ============== 表单（根据是否使用 FormSubmit 切换模式） =====================
+const form = document.getElementById('contact-form');
+const inbox = document.getElementById('inbox');
+const list = document.getElementById('inbox-list');
+const formTip = document.getElementById('form-tip');
 
-    const simulateLocal = !form.hasAttribute('action'); // 没有 action → 本地模拟；有 action → 真发信
+// 判断当前是否为“真实提交”模式（接入 FormSubmit）
+const isLive = form && form.action && form.action.includes('formsubmit.co');
 
-    if (simulateLocal) {
-      function loadMessages(){
-        const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
-        if(msgs.length){
-          inbox.style.display = 'block';
-          list.innerHTML = '';
-          msgs.slice().reverse().forEach(m => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `<h3>${m.name} &lt;${m.email}&gt;</h3><p>${m.message}</p><p class="badge">${new Date(m.time).toLocaleString()}</p>`;
-            list.appendChild(card);
-          });
-        }
-      }
+function loadMessages(){
+  const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
+  if(msgs.length){
+    inbox.style.display = 'block';
+    list.innerHTML = '';
+    msgs.slice().reverse().forEach(m => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<h3>${m.name} &lt;${m.email}&gt;</h3><p>${m.message}</p><p class="badge">${new Date(m.time).toLocaleString()}</p>`;
+      list.appendChild(card);
+    });
+  }
+}
 
-      form.addEventListener('submit', (e)=>{
-        e.preventDefault();
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const message = form.message.value.trim();
-        if(!name || !email || !message){ return; }
-        const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
-        msgs.push({name,email,message,time:Date.now()});
-        localStorage.setItem('messages', JSON.stringify(msgs));
-        form.reset();
-        loadMessages();
-        alert('✅ 已发送（本地模拟）。要实现真发信，需要后端或第三方服务。');
-      });
+if(!isLive){
+  // 本地模拟模式（用于纯前端练习）
+  loadMessages();
+  formTip && (formTip.textContent = '提交后将存入浏览器本地存储');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+    if(!name || !email || !message){ return; }
+    const msgs = JSON.parse(localStorage.getItem('messages')||'[]');
+    msgs.push({name,email,message,time:Date.now()});
+    localStorage.setItem('messages', JSON.stringify(msgs));
+    form.reset();
+    loadMessages();
+    alert('✅ 已发送（本地模拟）。要实现真发信，需要接入 FormSubmit/Netlify Forms 等。');
+  });
+} else {
+  // 真实提交模式（接入 FormSubmit）：允许浏览器默认提交
+  if(inbox) inbox.style.display = 'none';
+  formTip && (formTip.textContent = '提交后将跳转到成功页面并发送到我的邮箱');
+  // 不添加 submit 拦截，让表单自然提交
+}
 
-      loadMessages();
-      tip && (tip.textContent = '提交后将存入浏览器本地存储');
-    } else {
-      // 真发信：不拦截提交，浏览器会直接 POST 到 Formspree
-      inbox && (inbox.style.display='none');
-      tip && (tip.textContent = '将把信息发送到我的邮箱');
-    }
 
     // ============== 小改动：同步标题中的名字 ===================
     const nameSpans = document.querySelectorAll('.brand');
